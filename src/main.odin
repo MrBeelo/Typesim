@@ -32,7 +32,12 @@ update :: proc() {
 		
 	rl.BeginDrawing()
 
-	clear_background()
+	{
+		property := i32(rl.GuiDefaultProperty.BACKGROUND_COLOR)
+		style := u32(rl.GuiGetStyle(.DEFAULT, property))
+		rl.ClearBackground(rl.GetColor(style))
+	}
+	
 	draw_word_text()
 	draw_typed_chars()
 	draw_cursor()
