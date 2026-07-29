@@ -41,7 +41,8 @@
 					...imports
 				}
 
-				return WebAssembly.instantiateStreaming(fetch("index.wasm"), newImports).then(function(output) {
+				const wasmFile = document.currentScript.src.replace(/\.js$/, ".wasm");
+				return WebAssembly.instantiateStreaming(fetch(wasmFile), newImports).then(function(output) {
 					var e = output.instance.exports;
 					odinMemoryInterface.setExports(e);
 					odinMemoryInterface.setMemory(e.memory);

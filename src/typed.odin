@@ -17,9 +17,7 @@ append_typed_char :: proc(typed: rune, target: rune) {
 // This is done per-character for color support.
 draw_typed_chars :: proc(font_size := FontSize.MAIN) {	
 	total_offset_x: f32
-	#reverse for char in typed_chars {
-		font := fonts[font_size]
-		
+	#reverse for char in typed_chars {		
 		// If the rune is the null rune (UTF-8 codepoint: 0) then return.
 		// This would be catastrophic if it wasn't done, as every frame that
 		// the user doesn't press any keys, rl.GetCharPressed() returns the null rune.
@@ -33,12 +31,12 @@ draw_typed_chars :: proc(font_size := FontSize.MAIN) {
 		drawn_char := char.target if char.target != ' ' else '_'
 
 		// Gets the characters width.
-		size_x := get_codepoint_width(font, drawn_char)
+		size_x := get_codepoint_width(fonts[font_size], drawn_char)
 
 		pos_x := window_size.x / 2 - total_offset_x - size_x
 		pos_y := window_size.y / 2 - get_font_size(font_size) / 2
 
-		rl.DrawTextCodepoint(font, drawn_char, {pos_x, pos_y}, get_font_size(font_size), color)
+		rl.DrawTextCodepoint(fonts[font_size], drawn_char, {pos_x, pos_y}, get_font_size(font_size), color)
 		
 		total_offset_x += size_x + FONT_SPACING
 	}

@@ -5,7 +5,7 @@ import rl "vendor:raylib"
 GuiStyleProp :: struct {
     controlId: rl.GuiControl,
     propertyId: int,
-    propertyValue: int,
+    propertyValue: i64,
 }
 
 CYBER_STYLE_PROPS_COUNT :: 17

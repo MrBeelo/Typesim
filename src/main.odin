@@ -28,6 +28,9 @@ update :: proc() {
 		}
 		
 		cursor_index += 1
+
+		characters_typed += 1
+		if char_pressed == target_char do correct_characters_typed += 1
 	}
 		
 	rl.BeginDrawing()
@@ -37,6 +40,7 @@ update :: proc() {
 	draw_word_text()
 	draw_typed_chars()
 	draw_cursor()
+	draw_stats()
 
 	rl.EndDrawing()
 
