@@ -9,7 +9,7 @@ init :: proc() {
 	rl.InitWindow(i32(window_size.x), i32(window_size.y), "Typesim")
 	GuiLoadStyleCyber()
 
-	load_font()
+	load_fonts()
 	load_words()
 	init_words()
 }
@@ -32,11 +32,7 @@ update :: proc() {
 		
 	rl.BeginDrawing()
 
-	{
-		property := i32(rl.GuiDefaultProperty.BACKGROUND_COLOR)
-		style := u32(rl.GuiGetStyle(.DEFAULT, property))
-		rl.ClearBackground(rl.GetColor(style))
-	}
+	rl.ClearBackground(rl.GetColor(u32(rl.GuiGetStyle(.DEFAULT, i32(rl.GuiDefaultProperty.BACKGROUND_COLOR)))))
 	
 	draw_word_text()
 	draw_typed_chars()
