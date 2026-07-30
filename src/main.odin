@@ -2,7 +2,7 @@ package main
 
 import rl "vendor:raylib"
 
-window_size :: [2]f32{800, 450}
+window_size :: [2]f32{1920, 1080}
 
 init :: proc() {
 	rl.SetConfigFlags({.VSYNC_HINT})
@@ -14,7 +14,7 @@ init :: proc() {
 	init_words()
 }
 
-update :: proc() {
+update :: proc() {	
 	char_pressed := rl.GetCharPressed()
 	if char_pressed != rune(0) {
 		word_string := get_word_string()
@@ -25,6 +25,9 @@ update :: proc() {
 		if target_char == ' ' {
 			cursor_index -= len(active_words[0])
 			advance_word()
+
+			type_times[0] = type_times[1]
+			type_times[1] = f32(rl.GetTime())
 		}
 		
 		cursor_index += 1

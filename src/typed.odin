@@ -2,7 +2,7 @@ package main
 
 import rl "vendor:raylib"
 
-MAX_TYPED_CHARS :: 23
+MAX_TYPED_CHARS :: 50
 typed_chars: [MAX_TYPED_CHARS]struct{ typed: rune, target: rune }
 
 // Appends the character the user typed to the typed_chars array,

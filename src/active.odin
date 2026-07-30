@@ -3,7 +3,7 @@ package main
 import "core:strings"
 import rlo "raylib_odin"
 
-MAX_ACTIVE_WORDS :: 7
+MAX_ACTIVE_WORDS :: 15
 active_words: [MAX_ACTIVE_WORDS]string
 
 // Gets a string of all active words.

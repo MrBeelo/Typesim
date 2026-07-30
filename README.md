@@ -8,4 +8,4 @@ To add:
 - Keyboard display thingy
 - Many many styles (hexamania)
 - Undoing (only for current word)
-- WPM counter
+- Proper WPM counter
