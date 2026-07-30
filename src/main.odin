@@ -2,7 +2,7 @@ package main
 
 import rl "vendor:raylib"
 
-window_size :: [2]f32{1920, 1080}
+window_size :: [2]f32{800, 450}
 
 init :: proc() {
 	rl.SetConfigFlags({.VSYNC_HINT})
@@ -34,6 +34,16 @@ update :: proc() {
 
 		characters_typed += 1
 		if char_pressed == target_char do correct_characters_typed += 1
+	}
+
+	if rl.IsKeyPressed(.BACKSPACE) && can_perform_backspace() {
+		if rl.IsKeyDown(.LEFT_CONTROL) {
+			// If ctrl+backspace, delete whole word.
+			for can_perform_backspace() do perform_backspace()
+		} else {
+			// Just backspace, delete last character.
+			perform_backspace()
+		}
 	}
 		
 	rl.BeginDrawing()

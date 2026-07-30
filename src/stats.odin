@@ -19,7 +19,15 @@ get_wpm :: proc() -> f32 {
 draw_stats :: proc(font_size := FontSize.STATS) {
 	accuracy := f32(correct_characters_typed) / f32(characters_typed) * 100 if characters_typed != 0 else 100
 	wpm := get_wpm()
-	text := string(fmt.ctprintf("WORDS TYPED: %d - ACCURACY: %.1f%% - CURRENT WPM: %.1f", words_typed, accuracy, wpm))
-	draw_text_centered(fonts[font_size], text, window_size / 2 + {0, -get_font_size(.MAIN)}, 
+
+	texts := [?]cstring{
+		fmt.ctprintf("WORDS TYPED: %d - ACCURACY: %.1f%%", words_typed, accuracy),
+		fmt.ctprintf("CURRENT WPM: %.1f", wpm),
+	}
+	
+	draw_text_centered(fonts[font_size], texts[0], window_size / 2 + {0, -(get_font_size(.MAIN) + get_font_size(.STATS) + 5)}, 
+		0, get_font_size(font_size), FONT_SPACING, get_font_color())
+
+	draw_text_centered(fonts[font_size], texts[1], window_size / 2 + {0, -get_font_size(.MAIN)}, 
 		0, get_font_size(font_size), FONT_SPACING, get_font_color())
 }

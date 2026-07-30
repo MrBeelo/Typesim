@@ -7,5 +7,4 @@ using this to type a few thousand words a day in the *correct* way...
 To add:  
 - Keyboard display thingy
 - Many many styles (hexamania)
-- Undoing (only for current word)
 - Proper WPM counter

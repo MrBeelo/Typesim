@@ -14,3 +14,12 @@ draw_cursor :: proc() {
 	rect := rl.Rectangle{window_size.x / 2 - SIZE.x / 2, window_size.y / 2 - SIZE.y / 2 + OFFSET_Y, SIZE.x, SIZE.y}
 	rl.DrawRectangleRec(rect, get_font_color())
 }
+
+perform_backspace :: proc() {
+	cursor_index -= 1
+	pop_typed_char()
+}
+
+can_perform_backspace :: proc() -> bool {
+	return cursor_index > 0 && typed_chars[len(typed_chars) - 1].target != ' '
+}

@@ -13,6 +13,15 @@ append_typed_char :: proc(typed: rune, target: rune) {
 	typed_chars[last] = {typed, target}
 }
 
+// Pops the last typed character, and replaces the first one with
+// the null rune (or the character pair specified). This is 
+// basically the opposite to append_typed_char.
+pop_typed_char :: proc(typed := rune(0), target := rune(0)) {
+	last := len(typed_chars) - 1
+	copy(typed_chars[1:], typed_chars[:last])
+	typed_chars[0] = {typed, target}
+}
+
 // Draws the characters the user has typed.
 // This is done per-character for color support.
 draw_typed_chars :: proc(font_size := FontSize.MAIN) {	
@@ -33,10 +42,11 @@ draw_typed_chars :: proc(font_size := FontSize.MAIN) {
 		// Gets the characters width.
 		size_x := get_codepoint_width(fonts[font_size], drawn_char)
 
-		pos_x := window_size.x / 2 - total_offset_x - size_x
-		pos_y := window_size.y / 2 - get_font_size(font_size) / 2
+		pos: rl.Vector2
+		pos.x = window_size.x / 2 - total_offset_x - size_x
+		pos.y = window_size.y / 2 - get_font_size(font_size) / 2
 
-		rl.DrawTextCodepoint(fonts[font_size], drawn_char, {pos_x, pos_y}, get_font_size(font_size), color)
+		rl.DrawTextCodepoint(fonts[font_size], drawn_char, pos, get_font_size(font_size), color)
 		
 		total_offset_x += size_x + FONT_SPACING
 	}

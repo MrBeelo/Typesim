@@ -1,7 +1,6 @@
 package main
 
 import rl "vendor:raylib"
-import rlo "raylib_odin"
 
 FontSize :: enum { STATS, MAIN }
 
@@ -35,9 +34,9 @@ get_codepoint_width :: proc(font: rl.Font, char: rune) -> f32 {
 	}
 }
 
-draw_text_centered :: proc(font: rl.Font, text: string, center: rl.Vector2, rotation: f32, font_size: f32, font_spacing: f32, tint: rl.Color) {
-	text_size := rlo.MeasureTextEx(font, text, font_size, font_spacing)
-	rlo.DrawTextPro(font, text, center, text_size / 2, rotation, font_size, font_spacing, tint)
+draw_text_centered :: proc(font: rl.Font, text: cstring, center: rl.Vector2, rotation: f32, font_size: f32, font_spacing: f32, tint: rl.Color) {
+	text_size := rl.MeasureTextEx(font, text, font_size, font_spacing)
+	rl.DrawTextPro(font, text, center, text_size / 2, rotation, font_size, font_spacing, tint)
 }
 
 get_font_color :: proc() -> rl.Color {

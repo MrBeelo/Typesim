@@ -1,7 +1,7 @@
 package main
 
 import "core:strings"
-import rlo "raylib_odin"
+import rl "vendor:raylib"
 
 MAX_ACTIVE_WORDS :: 15
 active_words: [MAX_ACTIVE_WORDS]string
@@ -24,7 +24,21 @@ draw_word_text :: proc(font_size := FontSize.MAIN) {
 	OFFSET_X :: 3
 	
 	text := get_word_string()
-	text_size := rlo.MeasureTextEx(fonts[font_size], text, get_font_size(font_size), FONT_SPACING)
-	rlo.DrawTextPro(fonts[font_size], text[cursor_index:], window_size / 2 + {OFFSET_X, -text_size.y / 2}, 0, 0, get_font_size(font_size), 
-		FONT_SPACING, get_font_color())
+	total_offset_x: f32
+	
+	for char in text[cursor_index:] {
+		// Just for safety!
+		if char == rune(0) do continue
+
+		// Gets the characters width.
+		size_x := get_codepoint_width(fonts[font_size], char)
+
+		pos: rl.Vector2
+		pos.x = window_size.x / 2 + total_offset_x + OFFSET_X
+		pos.y = window_size.y / 2 - get_font_size(font_size) / 2
+
+		rl.DrawTextCodepoint(fonts[font_size], char, pos, get_font_size(font_size), get_font_color())
+		
+		total_offset_x += size_x + FONT_SPACING
+	}
 }
