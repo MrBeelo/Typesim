@@ -2,10 +2,10 @@ package main
 
 import rl "vendor:raylib"
 
-window_size :: [2]f32{800, 450}
+window_size := [2]f32{800, 450}
 
 init :: proc() {
-	rl.SetConfigFlags({.VSYNC_HINT})
+	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT, .WINDOW_RESIZABLE})
 	rl.InitWindow(i32(window_size.x), i32(window_size.y), "Typesim")
 	GuiLoadStyleCyber()
 
@@ -15,19 +15,24 @@ init :: proc() {
 }
 
 update :: proc() {	
+	window_size = {f32(rl.GetRenderWidth()), f32(rl.GetRenderHeight())}
+	
+	word_string := get_word_string()
+	target_char := rune(word_string[cursor_index])
+	
 	char_pressed := rl.GetCharPressed()
 	if char_pressed != rune(0) {
-		word_string := get_word_string()
-		target_char := rune(word_string[cursor_index])
-		
 		append_typed_char(char_pressed, target_char)
+
+		char_type_times[0] = char_type_times[1]
+		char_type_times[1] = f32(rl.GetTime())
 		
 		if target_char == ' ' {
 			cursor_index -= len(active_words[0])
 			advance_word()
 
-			type_times[0] = type_times[1]
-			type_times[1] = f32(rl.GetTime())
+			word_type_times[0] = word_type_times[1]
+			word_type_times[1] = f32(rl.GetTime())
 		}
 		
 		cursor_index += 1
@@ -54,6 +59,7 @@ update :: proc() {
 	draw_typed_chars()
 	draw_cursor()
 	draw_stats()
+	draw_keyboard(target_char)
 
 	rl.EndDrawing()
 

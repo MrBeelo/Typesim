@@ -2,10 +2,9 @@ package main
 
 import rl "vendor:raylib"
 
-FontSize :: enum { STATS, MAIN }
+FontSize :: enum { KEYBOARD, STATS, MAIN }
 
 fonts: [FontSize]rl.Font
-MAIN_FONT_SIZE :: 64
 FONT_SPACING :: 1
 
 load_fonts :: proc() {
@@ -14,11 +13,14 @@ load_fonts :: proc() {
 
 load_font :: proc(font_size: i32) -> rl.Font {
 	data := #load("../res/Kyrou7Wide.ttf")
-	return rl.LoadFontFromMemory(".ttf", &data[0], i32(len(data)), font_size, nil, 0)
+	font := rl.LoadFontFromMemory(".ttf", &data[0], i32(len(data)), font_size, nil, 0)
+	rl.SetTextureFilter(font.texture, .BILINEAR)
+	return font
 }
 
 get_font_size :: proc(font_size: FontSize) -> f32 {
 	switch font_size {
+	case .KEYBOARD: return 24
 	case .STATS: return 32
 	case .MAIN: return 64
 	}
