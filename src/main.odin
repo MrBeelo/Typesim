@@ -5,7 +5,7 @@ import rl "vendor:raylib"
 window_size := [2]f32{800, 450}
 
 init :: proc() {
-	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT, .WINDOW_RESIZABLE})
+	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT})
 	rl.InitWindow(i32(window_size.x), i32(window_size.y), "Typesim")
 	GuiLoadStyleCyber()
 
