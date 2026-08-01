@@ -12,13 +12,13 @@ draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, color: rl.Color, hi
 	THICKNESS :: 2
 	rec := rl.Rectangle{center.x - size.x / 2, center.y - size.y / 2, size.x, size.y}
 
-	if highlight {
-		highlight_color := get_base_color()
-		rl.DrawRectangleRec(rec, highlight_color)
-	}
-	
-	rl.DrawRectangleLinesEx(rec, THICKNESS, color)
-	draw_text_centered(get_font(.KEYBOARD), text, center, 0, get_font_size(.KEYBOARD), FONT_SPACING, get_font_color())
+	border_color := focused_border_color() if highlight else border_color()
+	base_color := focused_base_color() if highlight else base_color()
+	text_color := focused_text_color() if highlight else text_color()
+
+	if highlight || settings.show_key_base_color do rl.DrawRectangleRec(rec, base_color)
+	rl.DrawRectangleLinesEx(rec, THICKNESS, color if settings.colored_key_borders else border_color)
+	draw_text_centered(get_font(.KEYBOARD), text, center, 0, get_font_size(.KEYBOARD), FONT_SPACING, text_color)
 }
 
 get_row_offset :: proc(row_index: int) -> f32 {
@@ -42,10 +42,12 @@ get_key_color :: proc(char_keyboard_index: int) -> rl.Color {
 	case 4, 5, 6: return rl.PINK
 	}
 
-	return get_font_color()
+	return text_color()
 }
 
 draw_keyboard :: proc(target_char: rune) {
+	if !settings.show_keyboard do return
+	
 	center := window_size / 2 + {0, get_font_size(.MAIN) + KEY_SIZE * 3 / 2}
 	rows := [?]string {
 		"QWERTYUIOP[]",
@@ -61,7 +63,7 @@ draw_keyboard :: proc(target_char: rune) {
 
 			x_offset := f32(char_keyboard_index) * (KEY_SIZE + OFFSET)
 			x_offset += get_row_offset(row_index)
-			x_offset += KEY_SIZE / 2 * (1 if char_keyboard_index >= 0 else -1)
+			if settings.split_keyboard do x_offset += KEY_SIZE / 2 * (1 if char_keyboard_index >= 0 else -1)
 			
 			pos := center + {x_offset, y_offset}
 			
@@ -77,6 +79,6 @@ draw_keyboard :: proc(target_char: rune) {
 	{
 		pos := center + {0, (KEY_SIZE + OFFSET) * 2}
 		size := rl.Vector2{KEY_SIZE * SPACE_SIZE_RATIO, KEY_SIZE}
-		draw_keyboard_key("SPACE", pos, get_font_color(), target_char == ' ', size)
+		draw_keyboard_key("SPACE", pos, text_color(), target_char == ' ', size)
 	}	
 }

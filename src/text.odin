@@ -3,7 +3,7 @@ package main
 import rl "vendor:raylib"
 
 FontSize :: enum { KEYBOARD, STATS, MAIN }
-FontStyle :: enum { CYBER, HEXAMANIA }
+FontStyle :: enum { CYBER, JUNGLE, HEXAMANIA }
 
 fonts: [FontStyle][FontSize]rl.Font
 FONT_SPACING :: 1
@@ -13,23 +13,24 @@ load_fonts :: proc() {
 }
 
 load_font :: proc(font_size: i32, font_style: FontStyle) -> rl.Font {
-	data := get_font_data(font_style)
-	font := rl.LoadFontFromMemory(".ttf", &data[0], i32(len(data)), font_size, nil, 0)
+	data, extension := get_font_data(font_style)
+	font := rl.LoadFontFromMemory(extension, &data[0], i32(len(data)), font_size, nil, 0)
 	rl.SetTextureFilter(font.texture, .BILINEAR)
 	return font
 }
 
 get_font :: proc(font_size: FontSize) -> rl.Font {
-	return fonts[current_style][font_size]
+	return fonts[settings.current_style][font_size]
 }
 
-get_font_data :: proc(font_style: FontStyle) -> []u8 {
+get_font_data :: proc(font_style: FontStyle) -> ([]u8, cstring) {
 	switch font_style {
-	case .CYBER: return #load("../res/Kyrou7Wide.ttf")
-	case .HEXAMANIA: return #load("../res/Quicksand-SemiBold.ttf")
+	case .CYBER: return #load("../res/Kyrou7Wide.ttf"), ".ttf"
+	case .JUNGLE: return #load("../res/PixelIntv.otf"), ".otf"
+	case .HEXAMANIA: return #load("../res/Quicksand-SemiBold.ttf"), ".ttf"
 	}
 	
-	return {}
+	return {}, ""
 }
 
 get_font_size :: proc(font_size: FontSize) -> f32 {

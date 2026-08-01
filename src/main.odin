@@ -8,7 +8,7 @@ init :: proc() {
 	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT})
 	rl.InitWindow(i32(window_size.x), i32(window_size.y), "Typesim")
 
-	activate_style(current_style)
+	activate_style(settings.current_style)
 	load_fonts()
 	load_words()
 	init_words()
@@ -26,7 +26,8 @@ update :: proc() {
 
 		char_type_times[0] = char_type_times[1]
 		char_type_times[1] = f32(rl.GetTime())
-		
+
+		// If target character is a space, do word advancing stuff
 		if target_char == ' ' {
 			cursor_index -= len(active_words[0])
 			advance_word()
@@ -53,7 +54,7 @@ update :: proc() {
 		
 	rl.BeginDrawing()
 
-	rl.ClearBackground(get_background_color())
+	rl.ClearBackground(background_color())
 	
 	draw_word_text()
 	draw_typed_chars()
@@ -61,7 +62,7 @@ update :: proc() {
 	draw_stats()
 	draw_keyboard(target_char)
 
-	rl.GuiButton({10, 10, 100, 100}, "#191#Hello!")
+	rl.GuiButton({10, 10, 50, 50}, "Hi!")
 
 	rl.EndDrawing()
 

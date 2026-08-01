@@ -12,7 +12,7 @@ draw_cursor :: proc() {
 	OFFSET_Y :: 5
 	
 	rect := rl.Rectangle{window_size.x / 2 - SIZE.x / 2, window_size.y / 2 - SIZE.y / 2 + OFFSET_Y, SIZE.x, SIZE.y}
-	rl.DrawRectangleRec(rect, get_font_color())
+	rl.DrawRectangleRec(rect, text_color())
 }
 
 perform_backspace :: proc() {
