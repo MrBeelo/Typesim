@@ -7,8 +7,8 @@ window_size := [2]f32{800, 450}
 init :: proc() {
 	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT})
 	rl.InitWindow(i32(window_size.x), i32(window_size.y), "Typesim")
-	GuiLoadStyleCyber()
 
+	activate_style(current_style)
 	load_fonts()
 	load_words()
 	init_words()
@@ -53,13 +53,15 @@ update :: proc() {
 		
 	rl.BeginDrawing()
 
-	rl.ClearBackground(rl.GetColor(u32(rl.GuiGetStyle(.DEFAULT, i32(rl.GuiDefaultProperty.BACKGROUND_COLOR)))))
+	rl.ClearBackground(get_background_color())
 	
 	draw_word_text()
 	draw_typed_chars()
 	draw_cursor()
 	draw_stats()
 	draw_keyboard(target_char)
+
+	rl.GuiButton({10, 10, 100, 100}, "#191#Hello!")
 
 	rl.EndDrawing()
 

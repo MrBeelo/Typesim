@@ -40,13 +40,13 @@ draw_typed_chars :: proc(font_size := FontSize.MAIN) {
 		drawn_char := char.target if char.target != ' ' else '_'
 
 		// Gets the characters width.
-		size_x := get_codepoint_width(fonts[font_size], drawn_char)
+		size_x := get_codepoint_width(get_font(font_size), drawn_char)
 
 		pos: rl.Vector2
 		pos.x = window_size.x / 2 - total_offset_x - size_x
 		pos.y = window_size.y / 2 - get_font_size(font_size) / 2
 
-		rl.DrawTextCodepoint(fonts[font_size], drawn_char, pos, get_font_size(font_size), color)
+		rl.DrawTextCodepoint(get_font(font_size), drawn_char, pos, get_font_size(font_size), color)
 		
 		total_offset_x += size_x + FONT_SPACING
 	}

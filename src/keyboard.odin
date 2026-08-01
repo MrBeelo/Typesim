@@ -13,12 +13,12 @@ draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, color: rl.Color, hi
 	rec := rl.Rectangle{center.x - size.x / 2, center.y - size.y / 2, size.x, size.y}
 
 	if highlight {
-		highlight_color := rl.GetColor(u32(rl.GuiGetStyle(.DEFAULT, i32(rl.GuiControlProperty.BASE_COLOR_NORMAL))))
+		highlight_color := get_base_color()
 		rl.DrawRectangleRec(rec, highlight_color)
 	}
 	
 	rl.DrawRectangleLinesEx(rec, THICKNESS, color)
-	draw_text_centered(fonts[.KEYBOARD], text, center, 0, get_font_size(.KEYBOARD), FONT_SPACING, get_font_color())
+	draw_text_centered(get_font(.KEYBOARD), text, center, 0, get_font_size(.KEYBOARD), FONT_SPACING, get_font_color())
 }
 
 get_row_offset :: proc(row_index: int) -> f32 {
