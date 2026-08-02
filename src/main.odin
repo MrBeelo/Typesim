@@ -21,7 +21,7 @@ update :: proc() {
 	target_char := rune(word_string[cursor_index])
 	
 	char_pressed := rl.GetCharPressed()
-	if char_pressed != rune(0) {
+	if char_pressed != rune(0) && !show_settings_menu {
 		append_typed_char(char_pressed, target_char)
 
 		char_type_times[0] = char_type_times[1]
@@ -42,7 +42,7 @@ update :: proc() {
 		if char_pressed == target_char do correct_characters_typed += 1
 	}
 
-	if rl.IsKeyPressed(.BACKSPACE) && can_perform_backspace() {
+	if rl.IsKeyPressed(.BACKSPACE) && can_perform_backspace() && !show_settings_menu {
 		if rl.IsKeyDown(.LEFT_CONTROL) {
 			// If ctrl+backspace, delete whole word.
 			for can_perform_backspace() do perform_backspace()
@@ -61,8 +61,7 @@ update :: proc() {
 	draw_cursor()
 	draw_stats()
 	draw_keyboard(target_char)
-
-	rl.GuiButton({10, 10, 50, 50}, "Hi!")
+	draw_gui()
 
 	rl.EndDrawing()
 
