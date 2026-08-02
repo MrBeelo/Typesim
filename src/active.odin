@@ -39,6 +39,6 @@ draw_word_text :: proc(font_size := FontSize.MAIN) {
 
 		rl.DrawTextCodepoint(get_font(font_size), char, pos, get_font_size(font_size), text_color())
 		
-		total_offset_x += size_x + FONT_SPACING
+		total_offset_x += size_x + text_spacing()
 	}
 }

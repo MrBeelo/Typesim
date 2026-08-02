@@ -18,7 +18,7 @@ draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, color: rl.Color, hi
 
 	if highlight || settings.show_key_base_color do rl.DrawRectangleRec(rec, base_color)
 	rl.DrawRectangleLinesEx(rec, THICKNESS, color if settings.colored_key_borders else border_color)
-	draw_text_centered(get_font(.KEYBOARD), text, center, 0, get_font_size(.KEYBOARD), FONT_SPACING, text_color)
+	draw_text_centered(get_font(.STATS), text, center, 0, get_font_size(.STATS), text_spacing(), text_color)
 }
 
 get_row_offset :: proc(row_index: int) -> f32 {

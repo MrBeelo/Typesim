@@ -8,10 +8,10 @@ init :: proc() {
 	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT})
 	rl.InitWindow(i32(window_size.x), i32(window_size.y), "Typesim")
 
-	activate_style(settings.current_style)
 	load_fonts()
 	load_words()
 	init_words()
+	activate_style(settings.current_style)
 }
 
 update :: proc() {	

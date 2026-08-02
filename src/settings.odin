@@ -9,9 +9,9 @@ Settings :: struct {
 }
 
 settings := Settings{
-	current_style = .CYBER,
+	current_style = .HEXAMANIA,
 	show_keyboard = true,
-	show_key_base_color = false,
-	colored_key_borders = true,
+	show_key_base_color = true,
+	colored_key_borders = false,
 	split_keyboard = true,
 }

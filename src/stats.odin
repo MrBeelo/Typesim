@@ -24,7 +24,7 @@ draw_stats :: proc(font_size := FontSize.STATS) {
 	for text, index in texts {
 		y_offset := get_font_size(.MAIN) + (get_font_size(.STATS) + 5) * (len(texts) - f32(index) - 1)
 		draw_text_centered(get_font(font_size), text, window_size / 2 - {0, y_offset}, 
-			0, get_font_size(font_size), FONT_SPACING, text_color())
+			0, get_font_size(font_size), text_spacing(), text_color())
 	}
 }
 

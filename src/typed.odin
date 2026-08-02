@@ -48,6 +48,6 @@ draw_typed_chars :: proc(font_size := FontSize.MAIN) {
 
 		rl.DrawTextCodepoint(get_font(font_size), drawn_char, pos, get_font_size(font_size), color)
 		
-		total_offset_x += size_x + FONT_SPACING
+		total_offset_x += size_x + text_spacing()
 	}
 }
