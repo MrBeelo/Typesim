@@ -2,11 +2,12 @@ package main
 
 import rl "vendor:raylib"
 import "core:fmt"
+import "core:strings"
 
 window_size := [2]f32{800, 450}
 should_close := false
 
-log :: fmt.printf
+log :: proc(str: string, args: ..any) { fmt.printfln(strings.concatenate({"GAME: ", str}, context.temp_allocator), ..args) }
 
 init :: proc() {
 	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT})
@@ -16,11 +17,14 @@ init :: proc() {
 	load_words()
 	
 	init_words()
+	init_settings()
 	activate_style(settings.current_style)
 }
 
 update :: proc() {	
 	window_size = {f32(rl.GetRenderWidth()), f32(rl.GetRenderHeight())}
+
+	if !show_settings_menu do time_spent += rl.GetFrameTime()
 	
 	word_string := get_word_string()
 	target_char := rune(word_string[cursor_index])

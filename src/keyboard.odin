@@ -8,9 +8,11 @@ KEY_SIZE :: f32(32)
 SPACE_SIZE_RATIO :: f32(7)
 OFFSET :: 4
 
-draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, color: rl.Color, highlight := false, size := rl.Vector2{KEY_SIZE, KEY_SIZE}) {
+draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, color: rl.Color, try_highlight := false, size := rl.Vector2{KEY_SIZE, KEY_SIZE}) {
 	THICKNESS :: 2
 	rec := rl.Rectangle{center.x - size.x / 2, center.y - size.y / 2, size.x, size.y}
+
+	highlight := try_highlight && settings.highlight_target_key
 
 	border_color := focused_border_color() if highlight else border_color()
 	base_color := focused_base_color() if highlight else base_color()

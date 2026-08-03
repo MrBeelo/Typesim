@@ -10,19 +10,25 @@ ELEMENT_HEIGHT :: 36
 TOGGLE_WIDTH :: 100
 COMBO_BOX_WIDTH :: 120
 
+MAIN_UI_SIZE :: 36
+
 show_settings_menu: bool
 
 draw_gui :: proc() {
-	exit_rec := rl.Rectangle{window_size.x - UI_BUFFER - 50, UI_BUFFER, 50, 50}
-	exit_clicked := rl.GuiButton(exit_rec, "#113#")
-	if exit_clicked do should_close = true
-	
-	settings_rec := rl.Rectangle{UI_BUFFER, UI_BUFFER, 100, 50}
-	settings_clicked := rl.GuiButton(settings_rec, "#142#Settings")
+	settings_rec := rl.Rectangle{UI_BUFFER, UI_BUFFER, MAIN_UI_SIZE, MAIN_UI_SIZE}
+	settings_clicked := rl.GuiButton(settings_rec, "#142#")
 	if settings_clicked do show_settings_menu = !show_settings_menu
 
+	save_rec := rl.Rectangle{MAIN_UI_SIZE + UI_BUFFER * 2, UI_BUFFER, MAIN_UI_SIZE, MAIN_UI_SIZE}
+	save_clicked := rl.GuiButton(save_rec, "#6#")
+	if save_clicked do save_settings()
+
+	exit_rec := rl.Rectangle{window_size.x - UI_BUFFER - MAIN_UI_SIZE, UI_BUFFER, MAIN_UI_SIZE, MAIN_UI_SIZE}
+	exit_clicked := rl.GuiButton(exit_rec, "#113#")
+	if exit_clicked do should_close = true
+
 	if show_settings_menu {
-		menu_size := rl.Vector2{250, 400}
+		menu_size := rl.Vector2{250, 9 * (ELEMENT_HEIGHT + ELEMENT_BUFFER) + ELEMENT_BUFFER + TOP_BAR_HEIGHT}
 		menu_rec := rl.Rectangle{window_size.x / 2 - menu_size.x / 2, window_size.y / 2 - menu_size.y / 2, menu_size.x, menu_size.y}
 
 		menu_state := rl.GuiWindowBox(menu_rec, "Settings")
@@ -30,7 +36,8 @@ draw_gui :: proc() {
 
 		// CURRENT STYLE
 		{
-			new := add_combo_box(menu_rec, 0, "GUI Style", "Cherry;Cyber;Hexamania;Jungle;Terminal", Font_Style, settings.current_style)
+			options: cstring = "Amber;Cherry;Cyber;Enefete;Genesis;Hexamania;Jungle;Lavanda;Terminal"
+			new := add_combo_box(menu_rec, 0, "GUI Style", options, Font_Style, settings.current_style)
 			if settings.current_style != new do activate_style(new)
 		}
 
@@ -42,14 +49,16 @@ draw_gui :: proc() {
 			add_toggle(menu_rec, 2.5, "Key Base Color", "No;Yes", &settings.show_key_base_color)
 			add_toggle(menu_rec, 3.5, "Colored Keys", "No;Yes", &settings.colored_key_borders)
 			add_toggle(menu_rec, 4.5, "Split Keyboard", "No;Yes", &settings.split_keyboard)
+			add_toggle(menu_rec, 5.5, "Highlight Target Key", "No;Yes", &settings.highlight_target_key)
 			rl.GuiEnable()
 		}
 
 		// WPM FORMAT
-		settings.wpm_format = add_combo_box(menu_rec, 6, "WPM Format", "Per Letter;Per Word;Average", WPM_Format, settings.wpm_format)
+		settings.wpm_format = add_combo_box(menu_rec, 7, "WPM Format", "Per Letter;Per Word;Average", 
+			WPM_Format, settings.wpm_format)
 
 		// VIEW TARGET LETTER
-		add_toggle(menu_rec, 7, "Judgement View", "Typed;Target", &settings.view_target_letter)
+		add_toggle(menu_rec, 8, "Judgement View", "Typed;Target", &settings.view_target_letter)
 	}
 }
 

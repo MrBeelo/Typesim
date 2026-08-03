@@ -11,12 +11,14 @@ correct_characters_typed: int
 word_type_times: [2]f32
 char_type_times: [2]f32
 
+time_spent: f32
+
 draw_stats :: proc(font_size := Font_Size.STATS) {
 	accuracy := f32(correct_characters_typed) / f32(characters_typed) * 100 if characters_typed != 0 else 100
 	wpm := get_wpm()
 
 	texts := [?]cstring{
-		fmt.ctprintf("TIME SPENT: %s - WORDS TYPED: %d", time_string(f32(rl.GetTime())), words_typed),
+		fmt.ctprintf("TIME SPENT: %s - WORDS TYPED: %d", time_string(time_spent), words_typed),
 		fmt.ctprintf("CURRENT WPM: %.1f - ACCURACY: %.1f%%", wpm, accuracy),
 	}
 
