@@ -1,8 +1,12 @@
 package main
 
 import rl "vendor:raylib"
+import "core:fmt"
 
 window_size := [2]f32{800, 450}
+should_close := false
+
+log :: fmt.printf
 
 init :: proc() {
 	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT})
@@ -10,6 +14,7 @@ init :: proc() {
 
 	load_fonts()
 	load_words()
+	
 	init_words()
 	activate_style(settings.current_style)
 }

@@ -2,33 +2,33 @@ package main
 
 import rl "vendor:raylib"
 
-FontSize :: enum { STATS, MAIN }
-FontStyle :: enum { CHERRY, CYBER, HEXAMANIA, JUNGLE, TERMINAL }
+Font_Size :: enum { STATS, MAIN }
+Font_Style :: enum { CHERRY, CYBER, HEXAMANIA, JUNGLE, TERMINAL }
 
-fonts: [FontStyle][FontSize]rl.Font
-style_fonts: [FontStyle]rl.Font
+fonts: [Font_Style][Font_Size]rl.Font
+style_fonts: [Font_Style]rl.Font
 
 load_fonts :: proc() {
-	for style in FontStyle {
+	for style in Font_Style {
 		// Load normal fonts (sizes are static, determined by get_font_size)
-		for size in FontSize do fonts[style][size] = load_font(i32(get_font_size(size)), style)
+		for size in Font_Size do fonts[style][size] = load_font(i32(get_font_size(size)), style)
 
 		// Load gui style fonts (sizes are variable, as they depend on the style)
 		style_fonts[style] = load_font(get_gui_text_size(styles[style]), style)
 	}
 }
 
-load_font :: proc(font_size: i32, font_style: FontStyle) -> rl.Font {
+load_font :: proc(font_size: i32, font_style: Font_Style) -> rl.Font {
 	data, extension := get_font_data(font_style)
 	font := rl.LoadFontFromMemory(extension, &data[0], i32(len(data)), font_size, nil, 0)
 	return font
 }
 
-get_font :: proc(font_size: FontSize) -> rl.Font {
+get_font :: proc(font_size: Font_Size) -> rl.Font {
 	return fonts[settings.current_style][font_size]
 }
 
-get_font_data :: proc(font_style: FontStyle) -> ([]u8, cstring) {
+get_font_data :: proc(font_style: Font_Style) -> ([]u8, cstring) {
 	switch font_style {
 	case .CHERRY: return #load("../res/Westington.ttf"), ".ttf"
 	case .CYBER: return #load("../res/Kyrou7Wide.ttf"), ".ttf"
@@ -40,7 +40,7 @@ get_font_data :: proc(font_style: FontStyle) -> ([]u8, cstring) {
 	return {}, ""
 }
 
-get_font_size :: proc(font_size: FontSize) -> f32 {
+get_font_size :: proc(font_size: Font_Size) -> f32 {
 	switch font_size {
 	case .STATS: return 32
 	case .MAIN: return 64

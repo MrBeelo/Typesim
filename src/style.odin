@@ -2,16 +2,16 @@ package main
 
 import rl "vendor:raylib"
 
-GuiStyleProp :: struct {
-    controlId: rl.GuiControl,
-    propertyId: int,
-    propertyValue: i64,
+Gui_Style_Prop :: struct {
+    control_id: rl.GuiControl,
+    property_id: int,
+    property_value: i64,
 }
 
-activate_style :: proc(style: FontStyle) {
+activate_style :: proc(style: Font_Style) {
 	props := styles[style]
 	for i in 0..<len(props) {
-		rl.GuiSetStyle(props[i].controlId, i32(props[i].propertyId), i32(props[i].propertyValue))
+		rl.GuiSetStyle(props[i].control_id, i32(props[i].property_id), i32(props[i].property_value))
 	}
 
 	font := style_fonts[style]
@@ -38,12 +38,12 @@ background_color :: proc() -> rl.Color { return get_property_color(i32(rl.GuiDef
 
 text_spacing :: proc() -> f32 { return f32(rl.GuiGetStyle(.DEFAULT, i32(rl.GuiDefaultProperty.TEXT_SPACING))) }
 
-get_gui_text_size :: proc(props: []GuiStyleProp) -> i32 {
-	for prop in props do if prop.propertyId == int(rl.GuiDefaultProperty.TEXT_SIZE) do return i32(prop.propertyValue)
+get_gui_text_size :: proc(props: []Gui_Style_Prop) -> i32 {
+	for prop in props do if prop.property_id == int(rl.GuiDefaultProperty.TEXT_SIZE) do return i32(prop.property_value)
 	return 0
 }
 
-styles := [FontStyle][]GuiStyleProp {
+styles := [Font_Style][]Gui_Style_Prop {
 	.CHERRY = {
 		{ .DEFAULT, 0, 0xda5757ff },    // DEFAULT_BORDER_COLOR_NORMAL
     	{ .DEFAULT, 1, 0x753233ff },    // DEFAULT_BASE_COLOR_NORMAL

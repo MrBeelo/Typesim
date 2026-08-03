@@ -20,7 +20,7 @@ advance_word :: proc() {
 }
 
 // Draws the words incoming (active words).
-draw_word_text :: proc(font_size := FontSize.MAIN) {
+draw_word_text :: proc(font_size := Font_Size.MAIN) {
 	OFFSET_X :: 3
 	
 	text := get_word_string()

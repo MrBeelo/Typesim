@@ -24,7 +24,7 @@ pop_typed_char :: proc(typed := rune(0), target := rune(0)) {
 
 // Draws the characters the user has typed.
 // This is done per-character for color support.
-draw_typed_chars :: proc(font_size := FontSize.MAIN) {	
+draw_typed_chars :: proc(font_size := Font_Size.MAIN) {	
 	total_offset_x: f32
 	#reverse for char in typed_chars {		
 		// If the rune is the null rune (UTF-8 codepoint: 0) then return.
@@ -37,7 +37,8 @@ draw_typed_chars :: proc(font_size := FontSize.MAIN) {
 
 		// Replace spaces with underscores for typed characters.
 		// This is done to show the user if they typed the space correctly.
-		drawn_char := char.target if char.target != ' ' else '_'
+		chosen_char := char.target if settings.view_target_letter else char.typed
+		drawn_char := chosen_char if chosen_char != ' ' else '_'
 
 		// Gets the characters width.
 		size_x := get_codepoint_width(get_font(font_size), drawn_char)
