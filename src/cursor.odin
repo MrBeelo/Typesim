@@ -5,6 +5,7 @@ import rl "vendor:raylib"
 
 cursor_index: int
 
+// Draws a blinking cursor at the center of the screen.
 draw_cursor :: proc() {
 	if math.mod_f64(rl.GetTime(), 1) > 0.5 do return
 	
@@ -15,11 +16,16 @@ draw_cursor :: proc() {
 	rl.DrawRectangleRec(rect, text_color())
 }
 
+// Shifts cursor to the right. Because typed characters get replaced every
+// time the user presses a button, this shouldn't be called many times consecutively.
+// Performing a backspace too many times in a row would show the user null runes at the far
+// left of the screen.
 perform_backspace :: proc() {
 	cursor_index -= 1
 	pop_typed_char()
 }
 
+// Limits the ability to perform a backspace, so that the above doesn't happen.
 can_perform_backspace :: proc() -> bool {
 	return cursor_index > 0 && typed_chars[len(typed_chars) - 1].target != ' '
 }

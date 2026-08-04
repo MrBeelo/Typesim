@@ -2,30 +2,29 @@ package main
 
 import rl "vendor:raylib"
 
+// Generic
 UI_BUFFER :: 10
+
+// Buttons
+MAIN_UI_SIZE :: 36
+
+// Settings menu
 TOP_BAR_HEIGHT :: 24
 ELEMENT_BUFFER :: 5
 ELEMENT_HEIGHT :: 36
-
 TOGGLE_WIDTH :: 100
 COMBO_BOX_WIDTH :: 120
 
-MAIN_UI_SIZE :: 36
-
 show_settings_menu: bool
 
+// Draws all UI elements, for both the main screen and the settings menu.
 draw_gui :: proc() {
-	settings_rec := rl.Rectangle{UI_BUFFER, UI_BUFFER, MAIN_UI_SIZE, MAIN_UI_SIZE}
-	settings_clicked := rl.GuiButton(settings_rec, "#142#")
-	if settings_clicked do show_settings_menu = !show_settings_menu
-
-	save_rec := rl.Rectangle{MAIN_UI_SIZE + UI_BUFFER * 2, UI_BUFFER, MAIN_UI_SIZE, MAIN_UI_SIZE}
-	save_clicked := rl.GuiButton(save_rec, "#6#")
-	if save_clicked do save_settings()
-
-	exit_rec := rl.Rectangle{window_size.x - UI_BUFFER - MAIN_UI_SIZE, UI_BUFFER, MAIN_UI_SIZE, MAIN_UI_SIZE}
-	exit_clicked := rl.GuiButton(exit_rec, "#113#")
-	if exit_clicked do should_close = true
+	draw_text_centered(get_font(.STYLE), "TYPESIM - 1.0", {window_size.x / 2, 20}, 0,
+		get_font_size(.STYLE), text_spacing(), text_color())
+	
+	if add_button(0, true, "#142#", "Settings") do show_settings_menu = !show_settings_menu
+	if add_button(1, true, "#6#", "Save Settings") do save_settings()
+	if add_button(0, false, "#113#", "Exit") do should_close = true
 
 	if show_settings_menu {
 		menu_size := rl.Vector2{250, 9 * (ELEMENT_HEIGHT + ELEMENT_BUFFER) + ELEMENT_BUFFER + TOP_BAR_HEIGHT}
@@ -62,35 +61,59 @@ draw_gui :: proc() {
 	}
 }
 
-// Note: This should probably take an enum (for T).
-add_combo_box :: proc(start: rl.Rectangle, index: f32, label_text: cstring, combo_box_text: cstring, $T: typeid, value: T) -> T {	
-	label_rec := get_label_rec(start, index)
+// Adds a default button, using the index system (horizontal). Returns true when clicked.
+add_button :: proc(index: f32, left: bool, text: cstring, tooltip: cstring) -> bool {
+	x_pos := UI_BUFFER + index * (UI_BUFFER + MAIN_UI_SIZE)
+	if !left do x_pos = window_size.x - MAIN_UI_SIZE - x_pos
+
+	rl.GuiSetTooltip(tooltip)
+	rl.GuiEnableTooltip()
+	
+	rec := rl.Rectangle{x_pos, UI_BUFFER, MAIN_UI_SIZE, MAIN_UI_SIZE}
+	clicked := rl.GuiButton(rec, text)
+
+	rl.GuiDisableTooltip()
+	
+	return clicked
+}
+
+// FOR SETTINGS MENU ONLY
+
+// Adds a default combo box. As it was needed, this just returns the new value,
+// so it doesn't take any pointers. T should be an enum.
+add_combo_box :: proc(menu: rl.Rectangle, index: f32, label_text: cstring, combo_box_text: cstring, $T: typeid, value: T) -> T {	
+	label_rec := get_label_rec(menu, index)
 	rl.GuiLabel(label_rec, label_text)
 
-	combo_box_rec := get_box_rec(start, label_rec.y, COMBO_BOX_WIDTH)
+	combo_box_rec := get_box_rec(menu, label_rec.y, COMBO_BOX_WIDTH)
 	new_value := i32(value)
 	rl.GuiComboBox(combo_box_rec, combo_box_text, &new_value)
 	return T(new_value)
 }
 
-add_toggle :: proc(start: rl.Rectangle, index: f32, label_text: cstring, toggle_text: cstring, value: ^bool) {
-	label_rec := get_label_rec(start, index)
+// Adds a default toggle. Directly changes the value at the bool pointer.
+add_toggle :: proc(menu: rl.Rectangle, index: f32, label_text: cstring, toggle_text: cstring, value: ^bool) {
+	label_rec := get_label_rec(menu, index)
 	rl.GuiLabel(label_rec, label_text)
 
-	toggle_rec := get_box_rec(start, label_rec.y, TOGGLE_WIDTH)
+	toggle_rec := get_box_rec(menu, label_rec.y, TOGGLE_WIDTH)
 	active := i32(value^)
 	rl.GuiToggleSlider(toggle_rec, toggle_text, &active)
 	value^ = bool(active)
 }
 
-get_label_rec :: proc(start: rl.Rectangle, index: f32) -> rl.Rectangle {
-	return rl.Rectangle{start.x + ELEMENT_BUFFER, get_element_y(start.y, index), start.width - ELEMENT_BUFFER * 2, ELEMENT_HEIGHT}
+// Gets the bounds of a label, using the index system.
+get_label_rec :: proc(menu: rl.Rectangle, index: f32) -> rl.Rectangle {
+	return rl.Rectangle{menu.x + ELEMENT_BUFFER, get_element_y(menu.y, index), menu.width - ELEMENT_BUFFER * 2, ELEMENT_HEIGHT}
 }
 
-get_box_rec :: proc(start: rl.Rectangle, label_y: f32, width: f32) -> rl.Rectangle {
-	return rl.Rectangle{start.x + start.width - ELEMENT_BUFFER - width, label_y, width, ELEMENT_HEIGHT}
+// Gets the bounds of a "box", which in this case is either a toggle or
+// a combo box, using its corresponding label. 
+get_box_rec :: proc(menu: rl.Rectangle, label_y: f32, width: f32) -> rl.Rectangle {
+	return rl.Rectangle{menu.x + menu.width - ELEMENT_BUFFER - width, label_y, width, ELEMENT_HEIGHT}
 }
 
-get_element_y :: proc(start_y: f32, index: f32) -> f32 {
-	return start_y + ELEMENT_BUFFER + TOP_BAR_HEIGHT + (ELEMENT_HEIGHT + ELEMENT_BUFFER) * f32(index)
+// Gets an element's Y position based on the index system.
+get_element_y :: proc(menu_y: f32, index: f32) -> f32 {
+	return menu_y + ELEMENT_BUFFER + TOP_BAR_HEIGHT + (ELEMENT_HEIGHT + ELEMENT_BUFFER) * f32(index)
 }

@@ -13,7 +13,9 @@ char_type_times: [2]f32
 
 time_spent: f32
 
-draw_stats :: proc(font_size := Font_Size.STATS) {
+// Self explanatory :D
+draw_stats :: proc() {
+	font_size := Font_Size.STATS
 	accuracy := f32(correct_characters_typed) / f32(characters_typed) * 100 if characters_typed != 0 else 100
 	wpm := get_wpm()
 
@@ -29,6 +31,8 @@ draw_stats :: proc(font_size := Font_Size.STATS) {
 	}
 }
 
+// Gets the CURRENT words per minute, depending on the setting.
+// Being current, it isn't influenced by the user's past performace.
 get_wpm :: proc() -> f32 {
 	word_diff := word_type_times[1] - word_type_times[0]
 	letter_diff := (char_type_times[1] - char_type_times[0]) * avg_word_length
@@ -44,6 +48,7 @@ get_wpm :: proc() -> f32 {
 	return 0 if diff <= 0 else 60 / diff
 }
 
+// More of a helper function, takes a float and returns a 'timer' string.
 time_string :: proc(value: f32) -> string {
 	mins := int(math.floor(value / 60))
 	secs := int(math.floor(value)) % 60

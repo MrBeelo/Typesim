@@ -6,7 +6,7 @@ import "core:math/rand"
 word_list: []string
 avg_word_length: f32
 
-// Load all words from input file into word_list.
+// Loads all words from input file into word_list.
 load_words :: proc() {
 	data := #load("../res/words.txt")
 	str := string(data)
@@ -15,7 +15,7 @@ load_words :: proc() {
 	word_list = words
 }
 
-// Fill active words.
+// Fills active words.
 init_words :: proc() {
 	for i in 0..<len(active_words) do active_words[i] = get_random_word()
 
@@ -24,7 +24,8 @@ init_words :: proc() {
 	avg_word_length = f32(total_word_length) / f32(len(word_list))
 }
 
-// Note: Random words always end with a space.
+// Gets a random word from the word list.
+// Note: Random words should always end with a space.
 get_random_word :: proc() -> string {
 	return rand.choice(word_list)
 }

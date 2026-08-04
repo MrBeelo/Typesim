@@ -7,7 +7,7 @@ import "core:strings"
 window_size := [2]f32{800, 450}
 should_close := false
 
-log :: proc(str: string, args: ..any) { fmt.printfln(strings.concatenate({"GAME: ", str}, context.temp_allocator), ..args) }
+log :: proc(str: string, args: ..any) { fmt.printfln(strings.concatenate({"TYPESIM: ", str}, context.temp_allocator), ..args) }
 
 init :: proc() {
 	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT})
@@ -16,19 +16,24 @@ init :: proc() {
 	load_fonts()
 	load_words()
 	
-	init_words()
+	init_words() // Should be done after loading words.
 	init_settings()
-	activate_style(settings.current_style)
+	activate_style(settings.current_style) // Should be done after initializing settings.
 }
 
 update :: proc() {	
 	window_size = {f32(rl.GetRenderWidth()), f32(rl.GetRenderHeight())}
 
 	if !show_settings_menu do time_spent += rl.GetFrameTime()
-	
+
+	// We make target_char "global" here so that it can be used
+	// for drawing the highlighted key on the keyboard later.
 	word_string := get_word_string()
 	target_char := rune(word_string[cursor_index])
-	
+
+	// GetCharPressed() is called every frame and always returns a
+	// value, so when the user isn't pressing anything, it returns
+	// a null rune. We ignore this case.
 	char_pressed := rl.GetCharPressed()
 	if char_pressed != rune(0) && !show_settings_menu {
 		append_typed_char(char_pressed, target_char)
@@ -46,11 +51,11 @@ update :: proc() {
 		}
 		
 		cursor_index += 1
-
 		characters_typed += 1
 		if char_pressed == target_char do correct_characters_typed += 1
 	}
 
+	// Backspace performing code
 	if rl.IsKeyPressed(.BACKSPACE) && can_perform_backspace() && !show_settings_menu {
 		if rl.IsKeyDown(.LEFT_CONTROL) {
 			// If ctrl+backspace, delete whole word.

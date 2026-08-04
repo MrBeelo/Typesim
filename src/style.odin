@@ -8,6 +8,11 @@ Gui_Style_Prop :: struct {
     property_value: i64,
 }
 
+// Activates the given style. This used to load the style font,
+// but this is now done once along with the other fonts at the start
+// of the program, for better performance.
+// This is basically equivalent to LoadGuiStyle<style>() that's generated
+// by rGuiStyler, just without loading the font.
 activate_style :: proc(style: Font_Style) {
 	settings.current_style = style
 
@@ -17,15 +22,16 @@ activate_style :: proc(style: Font_Style) {
 	}
 
 	font := get_font(.STYLE)
-
 	rl.GuiSetFont(font)
 	rl.SetShapesTexture(font.texture, {510, 254, 1, 1})
 }
 
+// Given a property, returns its value, as a color.
 get_property_color :: proc(property: i32) -> rl.Color {
 	return rl.GetColor(u32(rl.GuiGetStyle(.DEFAULT, property)))
 }
 
+// PROPERTY FUNCTIONS
 border_color :: proc() -> rl.Color { return get_property_color(i32(rl.GuiControlProperty.BORDER_COLOR_NORMAL)) }
 base_color :: proc() -> rl.Color { return get_property_color(i32(rl.GuiControlProperty.BASE_COLOR_NORMAL)) }
 text_color :: proc() -> rl.Color { return get_property_color(i32(rl.GuiControlProperty.TEXT_COLOR_NORMAL)) }
@@ -38,11 +44,15 @@ background_color :: proc() -> rl.Color { return get_property_color(i32(rl.GuiDef
 
 text_spacing :: proc() -> f32 { return f32(rl.GuiGetStyle(.DEFAULT, i32(rl.GuiDefaultProperty.TEXT_SPACING))) }
 
+// This is like a property function, but because it has to be called before any properties
+// have been activated, it takes some property slice.
 get_gui_text_size :: proc(props: []Gui_Style_Prop) -> i32 {
 	for prop in props do if prop.property_id == int(rl.GuiDefaultProperty.TEXT_SIZE) do return i32(prop.property_value)
 	return 0
 }
 
+// A list of properties for each style. These can be found on the generated
+// <style>.h files on raygui's github.
 styles := [Font_Style][]Gui_Style_Prop {
 	.AMBER = {
     	{ .DEFAULT, 0, 0x898988ff },    // DEFAULT_BORDER_COLOR_NORMAL

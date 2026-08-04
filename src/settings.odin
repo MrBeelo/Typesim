@@ -19,6 +19,8 @@ Settings :: struct {
 	view_target_letter: bool,
 }
 
+// Initialize settings to default values, and import from a 
+// settings file if it exists.
 init_settings :: proc() {
 	settings = default_settings()
 	
@@ -30,6 +32,7 @@ init_settings :: proc() {
 	log("Loading settings file!")
 }
 
+// Save settings data to a settings file, at the same directory as the executable.
 save_settings :: proc() {
 	opts := json.Marshal_Options{.JSON, true, false, 0, false, false, false, false, false, 0, false, false}
 	
@@ -40,9 +43,12 @@ save_settings :: proc() {
 	utils.write_entire_file(SETTINGS_PATH, data)
 }
 
+// Self explanatory. Note: making this a contextless function means that it can
+// now be called at the global scope. This is now called from a
+// function, but why not :)
 default_settings :: proc "contextless" () -> Settings {
 	return Settings{
-		current_style = .HEXAMANIA,
+		current_style = .CYBER,
 		show_keyboard = true,
 		show_key_base_color = true,
 		colored_key_borders = true,

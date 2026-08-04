@@ -24,7 +24,8 @@ pop_typed_char :: proc(typed := rune(0), target := rune(0)) {
 
 // Draws the characters the user has typed.
 // This is done per-character for color support.
-draw_typed_chars :: proc(font_size := Font_Size.MAIN) {	
+draw_typed_chars :: proc() {
+	font_size := Font_Size.MAIN
 	total_offset_x: f32
 	#reverse for char in typed_chars {		
 		// If the rune is the null rune (UTF-8 codepoint: 0) then return.

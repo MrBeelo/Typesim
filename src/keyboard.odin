@@ -8,6 +8,10 @@ KEY_SIZE :: f32(32)
 SPACE_SIZE_RATIO :: f32(7)
 OFFSET :: 4
 
+// Draws a single key at the given center.
+// 'color' is the border color of the key, which won't be shown if colored keys are disabled.
+// 'try_highlight' won't do anything if the corresponding setting hasn't been enabled.
+// 'size' paramter should only be changed for space.
 draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, color: rl.Color, try_highlight := false, size := rl.Vector2{KEY_SIZE, KEY_SIZE}) {
 	THICKNESS :: 2
 	rec := rl.Rectangle{center.x - size.x / 2, center.y - size.y / 2, size.x, size.y}
@@ -23,6 +27,8 @@ draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, color: rl.Color, tr
 	draw_text_centered(get_font(.STATS), text, center, 0, get_font_size(.STATS), text_spacing(), text_color)
 }
 
+// Gets the offset for each key row. This is done so that it looks like a
+// real keyboard, as if this wasn't done, the keys would be on a grid.
 get_row_offset :: proc(row_index: int) -> f32 {
 	switch row_index {
 	case 0: return 0
@@ -32,6 +38,7 @@ get_row_offset :: proc(row_index: int) -> f32 {
 	return 0
 }
 
+// Gets the key color, depending on the key's column.
 get_key_color :: proc(char_keyboard_index: int) -> rl.Color {
 	switch char_keyboard_index {
 	case -7, -6, -5: return rl.RED
@@ -47,6 +54,7 @@ get_key_color :: proc(char_keyboard_index: int) -> rl.Color {
 	return text_color()
 }
 
+// Draws the keyboard. 'target_char' is needed to highlight the target key.
 draw_keyboard :: proc(target_char: rune) {
 	if !settings.show_keyboard do return
 	
