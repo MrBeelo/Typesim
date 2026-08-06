@@ -4,6 +4,7 @@ import rl "vendor:raylib"
 import "core:fmt"
 import "core:strings"
 
+VERSION :: "1.0.1"
 window_size := [2]f32{800, 450}
 should_close := false
 

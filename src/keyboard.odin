@@ -6,13 +6,13 @@ import "core:strings"
 
 KEY_SIZE :: f32(32)
 SPACE_SIZE_RATIO :: f32(7)
-OFFSET :: 4
+KEY_OFFSET :: 4
 
 // Draws a single key at the given center.
-// 'color' is the border color of the key, which won't be shown if colored keys are disabled.
+// 'outer_color' is the border color of the key, which won't be shown if colored keys are disabled.
 // 'try_highlight' won't do anything if the corresponding setting hasn't been enabled.
 // 'size' paramter should only be changed for space.
-draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, color: rl.Color, try_highlight := false, size := rl.Vector2{KEY_SIZE, KEY_SIZE}) {
+draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, outer_color: rl.Color, try_highlight := false, size := rl.Vector2{KEY_SIZE, KEY_SIZE}) {
 	THICKNESS :: 2
 	rec := rl.Rectangle{center.x - size.x / 2, center.y - size.y / 2, size.x, size.y}
 
@@ -23,7 +23,7 @@ draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, color: rl.Color, tr
 	text_color := focused_text_color() if highlight else text_color()
 
 	if highlight || settings.show_key_base_color do rl.DrawRectangleRec(rec, base_color)
-	rl.DrawRectangleLinesEx(rec, THICKNESS, color if settings.colored_key_borders else border_color)
+	rl.DrawRectangleLinesEx(rec, THICKNESS, outer_color if settings.colored_key_borders else border_color)
 	draw_text_centered(get_font(.STATS), text, center, 0, get_font_size(.STATS), text_spacing(), text_color)
 }
 
@@ -66,12 +66,12 @@ draw_keyboard :: proc(target_char: rune) {
 	}
 
 	for row, row_index in rows {
-		y_offset := (f32(row_index) - 1) * (KEY_SIZE + OFFSET)
+		y_offset := (f32(row_index) - 1) * (KEY_SIZE + KEY_OFFSET)
 
 		for char, char_index in row {
 			char_keyboard_index := char_index - 5 // 0 -> Y, H, N
 
-			x_offset := f32(char_keyboard_index) * (KEY_SIZE + OFFSET)
+			x_offset := f32(char_keyboard_index) * (KEY_SIZE + KEY_OFFSET)
 			x_offset += get_row_offset(row_index)
 			if settings.split_keyboard do x_offset += KEY_SIZE / 2 * (1 if char_keyboard_index >= 0 else -1)
 			
@@ -87,7 +87,7 @@ draw_keyboard :: proc(target_char: rune) {
 	}
 
 	{
-		pos := center + {0, (KEY_SIZE + OFFSET) * 2}
+		pos := center + {0, (KEY_SIZE + KEY_OFFSET) * 2}
 		size := rl.Vector2{KEY_SIZE * SPACE_SIZE_RATIO, KEY_SIZE}
 		draw_keyboard_key("SPACE", pos, text_color(), target_char == ' ', size)
 	}	

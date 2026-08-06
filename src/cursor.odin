@@ -12,8 +12,8 @@ draw_cursor :: proc() {
 	SIZE :: rl.Vector2{2, 36}
 	OFFSET_Y :: 5
 	
-	rect := rl.Rectangle{window_size.x / 2 - SIZE.x / 2, window_size.y / 2 - SIZE.y / 2 + OFFSET_Y, SIZE.x, SIZE.y}
-	rl.DrawRectangleRec(rect, text_color())
+	rec := rl.Rectangle{window_size.x / 2 - SIZE.x / 2, window_size.y / 2 - SIZE.y / 2 + OFFSET_Y, SIZE.x, SIZE.y}
+	rl.DrawRectangleRec(rec, text_color())
 }
 
 // Shifts cursor to the right. Because typed characters get replaced every

@@ -1,6 +1,7 @@
 package main
 
 import rl "vendor:raylib"
+import "core:fmt"
 
 // Generic
 UI_BUFFER :: 10
@@ -19,7 +20,7 @@ show_settings_menu: bool
 
 // Draws all UI elements, for both the main screen and the settings menu.
 draw_gui :: proc() {
-	draw_text_centered(get_font(.STYLE), "TYPESIM - 1.0", {window_size.x / 2, 20}, 0,
+	draw_text_centered(get_font(.STYLE), fmt.ctprintf("TYPESIM - %s", VERSION), {window_size.x / 2, 20}, 0,
 		get_font_size(.STYLE), text_spacing(), text_color())
 	
 	if add_button(0, true, "#142#", "Settings") do show_settings_menu = !show_settings_menu
