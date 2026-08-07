@@ -24,7 +24,7 @@ draw_keyboard_key :: proc(text: cstring, center: rl.Vector2, outer_color: rl.Col
 
 	if highlight || settings.show_key_base_color do rl.DrawRectangleRec(rec, base_color)
 	rl.DrawRectangleLinesEx(rec, THICKNESS, outer_color if settings.colored_key_borders else border_color)
-	draw_text_centered(get_font(.STATS), text, center, 0, get_font_size(.STATS), text_spacing(), text_color)
+	draw_text_centered(get_font(.STATS), text, center, 0, get_font_size(.STATS), text_spacing(.STATS), text_color)
 }
 
 // Gets the offset for each key row. This is done so that it looks like a

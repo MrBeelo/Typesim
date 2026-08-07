@@ -32,7 +32,7 @@ draw_word_text :: proc() {
 		if char == rune(0) do continue
 
 		// Gets the characters width.
-		size_x := get_codepoint_width(get_font(font_size), char)
+		size_x := get_codepoint_width(get_font(font_size), char, get_font_size(font_size))
 
 		pos: rl.Vector2
 		pos.x = window_size.x / 2 + total_offset_x + OFFSET_X
@@ -40,6 +40,6 @@ draw_word_text :: proc() {
 
 		rl.DrawTextCodepoint(get_font(font_size), char, pos, get_font_size(font_size), text_color())
 		
-		total_offset_x += size_x + text_spacing()
+		total_offset_x += size_x + text_spacing(font_size)
 	}
 }

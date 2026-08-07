@@ -12,4 +12,4 @@ Might add in the future:
 - Typing sounds  
 - Relaxing music  
 
-Current version: 1.0  
+Current version: 1.0.2  

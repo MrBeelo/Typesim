@@ -23,7 +23,7 @@ activate_style :: proc(style: Font_Style) {
 
 	font := get_font(.STYLE)
 	rl.GuiSetFont(font)
-	rl.SetShapesTexture(font.texture, {510, 254, 1, 1})
+	if style != .DEFAULT do rl.SetShapesTexture(font.texture, {510, 254, 1, 1})
 }
 
 // Given a property, returns its value, as a color.
@@ -42,7 +42,10 @@ focused_text_color :: proc() -> rl.Color { return get_property_color(i32(rl.GuiC
 
 background_color :: proc() -> rl.Color { return get_property_color(i32(rl.GuiDefaultProperty.BACKGROUND_COLOR)) }
 
-text_spacing :: proc() -> f32 { return f32(rl.GuiGetStyle(.DEFAULT, i32(rl.GuiDefaultProperty.TEXT_SPACING))) }
+text_spacing :: proc(size: Font_Size) -> f32 { 
+	if settings.current_style == .DEFAULT do return get_font_size(size) / 10
+	return f32(rl.GuiGetStyle(.DEFAULT, i32(rl.GuiDefaultProperty.TEXT_SPACING))) 
+}
 
 // This is like a property function, but because it has to be called before any properties
 // have been activated, it takes some property slice.
@@ -112,6 +115,25 @@ styles := [Font_Style][]Gui_Style_Prop {
     	{ .DEFAULT, 18, 0x81c0d0ff },    // DEFAULT_LINE_COLOR 
     	{ .DEFAULT, 19, 0x00222bff },    // DEFAULT_BACKGROUND_COLOR 
     	{ .DEFAULT, 20, 0x00000007 },    // DEFAULT_TEXT_LINE_SPACING 
+	},
+	.DEFAULT = {
+		{ .DEFAULT, 0, 0x838383ff },    // DEFAULT_BORDER_COLOR_NORMAL
+		{ .DEFAULT, 1, 0xc9c9c9ff },    // DEFAULT_BASE_COLOR_NORMAL
+		{ .DEFAULT, 2, 0x686868ff },    // DEFAULT_TEXT_COLOR_NORMAL
+		{ .DEFAULT, 3, 0x5bb2d9ff },    // DEFAULT_BORDER_COLOR_FOCUSED
+		{ .DEFAULT, 4, 0xc9effeff },    // DEFAULT_BASE_COLOR_FOCUSED
+		{ .DEFAULT, 5, 0x6c9bbcff },    // DEFAULT_TEXT_COLOR_FOCUSED
+		{ .DEFAULT, 6, 0x0492c7ff },    // DEFAULT_BORDER_COLOR_PRESSED
+		{ .DEFAULT, 7, 0x97e8ffff },    // DEFAULT_BASE_COLOR_PRESSED
+		{ .DEFAULT, 8, 0x368bafff },    // DEFAULT_TEXT_COLOR_PRESSED
+		{ .DEFAULT, 9, 0xb5c1c2ff },    // DEFAULT_BORDER_COLOR_DISABLED
+		{ .DEFAULT, 10, 0xe6e9e9ff },    // DEFAULT_BASE_COLOR_DISABLED
+		{ .DEFAULT, 11, 0xaeb7b8ff },    // DEFAULT_TEXT_COLOR_DISABLED
+		{ .DEFAULT, 16, 0x0000000a },    // DEFAULT_TEXT_SIZE 
+		{ .DEFAULT, 17, 0x00000001 },    // DEFAULT_TEXT_SPACING 
+		{ .DEFAULT, 18, 0x90abb5ff },    // DEFAULT_LINE_COLOR 
+		{ .DEFAULT, 19, 0xf5f5f5ff },    // DEFAULT_BACKGROUND_COLOR 
+		{ .DEFAULT, 20, 0x0000000c },    // DEFAULT_TEXT_LINE_SPACING 
 	},
 	.ENEFETE = {
     	{ .DEFAULT, 0, 0x1980d5ff },    // DEFAULT_BORDER_COLOR_NORMAL

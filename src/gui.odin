@@ -21,7 +21,7 @@ show_settings_menu: bool
 // Draws all UI elements, for both the main screen and the settings menu.
 draw_gui :: proc() {
 	draw_text_centered(get_font(.STYLE), fmt.ctprintf("TYPESIM - %s", VERSION), {window_size.x / 2, 20}, 0,
-		get_font_size(.STYLE), text_spacing(), text_color())
+		get_font_size(.STYLE), text_spacing(.STYLE), text_color())
 	
 	if add_button(0, true, "#142#", "Settings") do show_settings_menu = !show_settings_menu
 	if add_button(1, true, "#6#", "Save Settings") do save_settings()
@@ -36,7 +36,7 @@ draw_gui :: proc() {
 
 		// CURRENT STYLE
 		{
-			options: cstring = "Amber;Cherry;Cyber;Enefete;Genesis;Hexamania;Jungle;Lavanda;Terminal"
+			options: cstring = "Amber;Cherry;Cyber;Default;Enefete;Genesis;Hexamania;Jungle;Lavanda;Terminal"
 			new := add_combo_box(menu_rec, 0, "GUI Style", options, Font_Style, settings.current_style)
 			if settings.current_style != new do activate_style(new)
 		}
